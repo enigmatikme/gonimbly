@@ -3,6 +3,12 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faSearch, faCog, faPlus } from '@fortawesome/free-solid-svg-icons'
+import { faTimesCircle } from '@fortawesome/free-regular-svg-icons'
+import "react-rain-animation/lib/style.css";
+
+library.add( faTimesCircle, faSearch, faCog, faPlus )
 
 ReactDOM.render(<App />, document.getElementById('root'));
 
