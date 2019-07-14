@@ -33,6 +33,11 @@ const Container = styled.div`
     right: 20px;
     transform: rotate(45deg);
     font-size: 20px;
+    transition: transform .3s ease;
+
+    &.open {
+      transform: rotate(0deg);
+    }
 
     path {
       fill: white;

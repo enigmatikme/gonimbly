@@ -8,17 +8,24 @@ export default function Search({ fetchCity }){
 
   function handleSubmit(e) {
     e.preventDefault();
-    fetchCity(value)
+    fetchCity(value);
     setOpen(!open);
+    setValue("");
   }
+
+  function focusInput(component){
+    if (component) {
+      component.focus();
+    }
+  };
 
   return (
     <Container>
       <form className={open ? "open" : "closed"} onSubmit={handleSubmit}>
-        <input type="text" value={value} onChange={(e) => setValue(e.target.value)} />
+        <input ref={focusInput} type="text" value={value} onChange={(e) => setValue(e.target.value)} />
       </form>
       <FontAwesomeIcon
-        className="search-icon"
+        className={`search-icon ${open ? "open" : ""}`}
         icon={["far", "times-circle"]}
         onClick={() => setOpen(!open)}
       />

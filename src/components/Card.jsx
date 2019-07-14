@@ -13,9 +13,10 @@ import Rain from './Rain';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 const Weather = ({consolidated_weather}) => {
+  // TODO: check consolidated weather for weather conditions cloudy/rain
   return (
     <WeatherContainer>
-      <Rain drops={400} />
+      <Rain drops={100} />
     </WeatherContainer>
   )
 }
@@ -23,12 +24,6 @@ const Weather = ({consolidated_weather}) => {
 const Day = (props) => {
   let day = moment(props.applicable_date).format('dddd')
   return <div className="day-row"> 
-    {/* current weather state: {props.weather_state_name}
-    date: {moment(props.applicable_date).format('dddd')}
-    current temp: {Math.round(props.the_temp)}
-    humidity: {props.humidity}
-    highs: {Math.round(props.max_temp)}
-    lows: {Math.round(props.min_temp)} */}
     <p>{day}</p>
     <div className="details">
       <p className="temp">{Math.round(props.the_temp)}&#176;</p>
@@ -50,8 +45,7 @@ export default function Card({consolidated_weather, closeCard, title, time}) {
     //* morning = 5 - 12
     //* 12 - 6 
     //* 6 - 5
-    let hour = parseInt("2019-07-14T05:40:04.042176+08:00".substring(11,13));
-    // let hour = parseInt(cityTime.substring(11,13));
+    let hour = parseInt(cityTime.substring(11,13));
     if (hour >= 5 && hour <= 11) {
       return images["morning"];
     } else if (hour >= 12 && hour <= 18) {
@@ -62,11 +56,9 @@ export default function Card({consolidated_weather, closeCard, title, time}) {
   }
 
   if (consolidated_weather) {
-    console.log("today", consolidated_weather[0]);
     let popped = consolidated_weather.shift()
     today = (popped === undefined) ? "Not shown" : popped;
-    let t = "2019-07-14T13:40:04.042176+08:00".substring(0,19)
-    console.log(t)
+    let t = time.substring(0,19)
     currentTime = moment(t).format("LT")
     //* sets image based on city time of day
     img = image(time);
@@ -76,7 +68,7 @@ export default function Card({consolidated_weather, closeCard, title, time}) {
       <ImageContainer>
         <img alt={`${img}`} src={`/img/${img}.png`}/>
       </ImageContainer>
-      {consolidated_weather && (
+      {consolidated_weather ? (
         <>
           <Weather />
           <ContentContainer>
@@ -84,7 +76,6 @@ export default function Card({consolidated_weather, closeCard, title, time}) {
               <p >{title}</p>
               <p>{currentTime}</p>
             </div>
-            {/* <button onClick={closeCard}>X</button> */}
             <FontAwesomeIcon
               className="close"
               icon={["far", "times-circle"]}
@@ -106,6 +97,14 @@ export default function Card({consolidated_weather, closeCard, title, time}) {
             </DayContainer>
           </ContentContainer>
         </>
+      ) : (
+        <ContentContainer>
+          <Today>
+            <div>
+              <h1 style={{fontSize: "20px"}}>Choose city</h1>
+            </div>
+          </Today>
+        </ContentContainer>
       )}
     </CardContainer>
 
