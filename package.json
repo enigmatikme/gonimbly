@@ -37,5 +37,17 @@
       "last 1 safari version"
     ]
   },
-  "homepage": "https://ronchon-moliere-27007.herokuapp.com/"
+  "proxies": {
+    "/api/": {
+      "origin": "${API_URL}"
+    }
+  },
+  "proxy": {
+    "/api": {
+      "target": "https://www.metaweather.com/",
+      "pathRewrite": {
+        "^/api": "/"
+      }
+    }
+  }
 }
