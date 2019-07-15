@@ -60,7 +60,6 @@ export default function Card({consolidated_weather, closeCard, title, time, temp
     currentTime = moment(t).format("LT")
     img = image(time);
   }
-  console.log(imgToTimeOfDay[img])
   return(
     <CardContainer>
       <ImageContainer>
