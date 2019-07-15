@@ -28,10 +28,14 @@ function App() {
 
   const fetchWeatherData = async (cityID) => {
     setLoading(true);
-    let res = await axios.get(`api/location/${cityID}/`).catch(err => console.log(err));
-    setCityData(res.data);
-    setActiveCity(cityID)
-    setLoading(false);
+    let res = await axios.get(`https://www.metaweather.com/api/location/${cityID}/`).catch(err => console.log(err));
+    if (res && res.data) {
+      setCityData(res.data);
+      setActiveCity(cityID)
+      setLoading(false);
+    } else {
+      alert("Error fetching data")
+    }
   }
 
   const closeCard = () => {

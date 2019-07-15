@@ -37,5 +37,6 @@
       "last 1 safari version"
     ]
   },
+  "proxy": "https://www.metaweather.com/",
   "homepage": "https://ronchon-moliere-27007.herokuapp.com/"
 }
