@@ -14,7 +14,7 @@ export default function Search({ addCity }){
     setError("");
     let encodedQuery = value.split(' ').join('%20');
     let res = await axios.get(`api/location/search/?query=${encodedQuery}`).catch(err => console.log(err));
-    if (res.data.length) {
+    if (res.data && res.data.length) {
       addCity(res.data[0]);
       setOpen(!open);
       setValue("");
