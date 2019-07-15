@@ -28,7 +28,7 @@ function App() {
 
   const fetchWeatherData = async (cityID) => {
     setLoading(true);
-    let res = await axios.get(`api/location/${cityID}/`).catch(err => console.log(err));
+    let res = await axios.get(`/api/location/${cityID}/`).catch(err => console.log(err));
     if (res && res.data) {
       setCityData(res.data);
       setActiveCity(cityID)

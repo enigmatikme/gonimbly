@@ -38,15 +38,15 @@
     ]
   },
   "proxies": {
-    "/api/": {
+    "/": {
       "origin": "${API_URL}"
     }
   },
   "proxy": {
-    "/api": {
-      "target": "https://www.metaweather.com/",
+    "/": {
+      "target": "https://www.metaweather.com",
       "pathRewrite": {
-        "^/api": "/"
+        "^/": "/"
       }
     }
   }
