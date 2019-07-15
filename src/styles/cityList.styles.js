@@ -9,6 +9,7 @@ const CityListContainer = styled.div`
     text-align: center;
     margin-bottom: 10px;
     color: white;
+
     min-width: 180px;
     border-radius: 20px;
     transition: box-shadow .3s ease;
@@ -19,6 +20,10 @@ const CityListContainer = styled.div`
 
     &.active, &:hover {
       box-shadow: 0px 0px 0px 3px white;
+    }
+
+    &.loading {
+      pointer-events: none;
     }
   }
 `; 

@@ -1,5 +1,7 @@
 import React from 'react';
 import moment from 'moment';
+import { image, convertDegrees } from '../helpers';
+import Loader from './Loader';
 import {  
   CardContainer,
   Today,
@@ -9,16 +11,26 @@ import {
   WeatherContainer,
 } from '../styles/card.styles';
 import Rain from './Rain';
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 const Weather = ({consolidated_weather}) => {
-  // TODO: check consolidated weather for weather conditions cloudy/rain
-  return (
-    <WeatherContainer>
-      <Rain drops={100} />
-    </WeatherContainer>
-  )
+  let rainDropsCount = {
+    "hr": 500,
+    "lr": 200,
+    "s": 100
+  }
+  , dropCount;
+  let abbr = consolidated_weather[0].weather_state_abbr;
+
+  if (rainDropsCount[abbr]) {
+    dropCount = rainDropsCount[abbr];
+    return (
+      <WeatherContainer>
+        <Rain drops={dropCount} />
+      </WeatherContainer>
+    )
+  } 
+  return null;
 }
 
 const Day = (props) => {
@@ -26,41 +38,22 @@ const Day = (props) => {
   return <div className="day-row"> 
     <p>{day}</p>
     <div className="details">
-      <p className="temp">{Math.round(props.the_temp)}&#176;</p>
+      <p className="temp">{Math.round(convertDegrees(props.the_temp, props.tempScale))}</p>
       <p className="state">{props.weather_state_name}</p> 
     </div>
   </div>
 }
-export default function Card({consolidated_weather, closeCard, title, time}) {
-  let today
-    , images = {
-      "morning": 'Moon',
-      "afternoon": 'Sun',
-      "evening": 'Blood'
-    }
-    , img = "Blood"
-    , currentTime
 
-  const image = (cityTime) => {
-    //* morning = 5 - 12
-    //* 12 - 6 
-    //* 6 - 5
-    let hour = parseInt(cityTime.substring(11,13));
-    if (hour >= 5 && hour <= 11) {
-      return images["morning"];
-    } else if (hour >= 12 && hour <= 18) {
-      return images["afternoon"];
-    } else {
-      return images["evening"];
-    }
-  }
+export default function Card({consolidated_weather, closeCard, title, time, tempScale, loading}) {
+  let today
+    , img = "Blood"
+    , currentTime;
 
   if (consolidated_weather) {
-    let popped = consolidated_weather.shift()
+    let popped = consolidated_weather[0]
     today = (popped === undefined) ? "Not shown" : popped;
     let t = time.substring(0,19)
     currentTime = moment(t).format("LT")
-    //* sets image based on city time of day
     img = image(time);
   }
   return(
@@ -70,43 +63,55 @@ export default function Card({consolidated_weather, closeCard, title, time}) {
       </ImageContainer>
       {consolidated_weather ? (
         <>
-          <Weather />
-          <ContentContainer>
-            <div className="city">
-              <p >{title}</p>
-              <p>{currentTime}</p>
-            </div>
-            <FontAwesomeIcon
-              className="close"
-              icon={["far", "times-circle"]}
-              onClick={closeCard}
-            />
-            <Today>
-              {(today !== '') && (
-                <div> 
-                  <h1>{Math.round(today.the_temp)}&#176;</h1>
-                  <h3>{today.weather_state_name}</h3> 
+          {loading ? (
+            <Loader className="outside-container" />
+          ) : (
+            <>
+              <Weather consolidated_weather={consolidated_weather}/>
+              <ContentContainer>
+                <div className="city">
+                  <p >{title}</p>
+                  <p>{currentTime}</p>
                 </div>
-              )}
-            </Today>
-            <DayContainer style={{display: 'flex'}}>
-              {consolidated_weather.map((day, i) => {
-                return <Day key={i} {...day} index={i}/>
-              })}
-
-            </DayContainer>
-          </ContentContainer>
+                <FontAwesomeIcon
+                  className="close"
+                  icon={["far", "times-circle"]}
+                  onClick={closeCard}
+                />
+                <Today>
+                  {(today !== '') && (
+                    <div> 
+                      <h1 className="temp">{Math.round(convertDegrees(today.the_temp, tempScale))}</h1>
+                      <h3>{today.weather_state_name}</h3> 
+                    </div>
+                  )}
+                </Today>
+                <DayContainer style={{display: 'flex'}}>
+                  {consolidated_weather.map((day, i) => {
+                    if (i !== 0) {
+                      return <Day tempScale={tempScale} key={i} {...day} index={i}/>
+                    }
+                  })}
+                </DayContainer>
+              </ContentContainer>
+            </>
+          )}
         </>
       ) : (
-        <ContentContainer>
-          <Today>
-            <div>
-              <h1 style={{fontSize: "20px"}}>Choose city</h1>
-            </div>
-          </Today>
-        </ContentContainer>
+        <>
+          {loading ? (
+            <Loader/>
+          ) : (
+          <ContentContainer>
+              <Today>
+                <div>
+                  <h1 style={{fontSize: "20px"}}>Choose city</h1>
+                </div>
+              </Today>
+          </ContentContainer>
+          )}
+        </>
       )}
     </CardContainer>
-
   )
 }

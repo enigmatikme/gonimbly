@@ -78,7 +78,15 @@ const Today = styled.div`
     font-weight: lighter;
     color: white;
     line-height: 70px;
+
+    &.temp {
+      &:after {
+        content: "\\00b0"; 
+        position: absolute;
+      }
+    }
   }
+
   h3 {
     margin: 0;
     font-size: 20px;
@@ -116,6 +124,11 @@ const DayContainer = styled.div`
     }
   }
 
+  .temp {
+    &:after {
+      content: "\\00b0"; 
+    }
+  }
 `;
 
 export {

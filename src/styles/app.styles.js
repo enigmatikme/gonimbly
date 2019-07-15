@@ -25,8 +25,21 @@ const SideBar = styled.div`
   flex-direction: column;
   width: 35%;
   height: 100%;
-  padding-right: 20px;
+  margin-right: 20px;
   position: relative;
+  .conversion {
+    font-size: 18px;
+    position: absolute;
+    bottom: 6px;
+    color: white;
+    transition: opacity .3s ease;
+  }
+  .open {
+    & + .conversion {
+      opacity: 0;
+      pointer-events: none;
+    }
+  }
 `;
 
 export { AppContainer, SideBar, ContentWrapper };
