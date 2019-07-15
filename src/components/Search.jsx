@@ -13,7 +13,7 @@ export default function Search({ addCity }){
     //  clear the error
     setError("");
     let encodedQuery = value.split(' ').join('%20');
-    let res = await axios.get(`https://www.metaweather.com/api/location/search/?query=${encodedQuery}`).catch(err => console.log(err));
+    let res = await axios.get(`/city/?query=${encodedQuery}`).catch(err => console.log(err));
     if (res.data && res.data.length) {
       addCity(res.data[0]);
       setOpen(!open);
