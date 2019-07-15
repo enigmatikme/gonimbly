@@ -1,9 +1,9 @@
 import React from 'react';
 import { LoaderContainer } from '../styles/loader.styles';
 
-export default function Loader() {
+export default function Loader({timeOfDay}) {
   return (
-    <LoaderContainer>
+    <LoaderContainer timeOfDay={timeOfDay}>
       <div id="ld4">
         <div>
         </div>

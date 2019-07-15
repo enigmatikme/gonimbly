@@ -47,8 +47,12 @@ const Day = (props) => {
 export default function Card({consolidated_weather, closeCard, title, time, tempScale, loading}) {
   let today
     , img = "Blood"
-    , currentTime;
-
+    , currentTime
+    , imgToTimeOfDay = {
+      "Moon": "morning",
+      "Sun": "afternoon",
+      "Blood": "evening",
+    }
   if (consolidated_weather) {
     let popped = consolidated_weather[0]
     today = (popped === undefined) ? "Not shown" : popped;
@@ -56,6 +60,7 @@ export default function Card({consolidated_weather, closeCard, title, time, temp
     currentTime = moment(t).format("LT")
     img = image(time);
   }
+  console.log(imgToTimeOfDay[img])
   return(
     <CardContainer>
       <ImageContainer>
@@ -64,7 +69,7 @@ export default function Card({consolidated_weather, closeCard, title, time, temp
       {consolidated_weather ? (
         <>
           {loading ? (
-            <Loader className="outside-container" />
+            <Loader timeOfDay={imgToTimeOfDay[img]} />
           ) : (
             <>
               <Weather consolidated_weather={consolidated_weather}/>
@@ -100,7 +105,7 @@ export default function Card({consolidated_weather, closeCard, title, time, temp
       ) : (
         <>
           {loading ? (
-            <Loader/>
+            <Loader timeOfDay={imgToTimeOfDay[img]} />
           ) : (
           <ContentContainer>
               <Today>

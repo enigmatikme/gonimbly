@@ -6,13 +6,25 @@ import axios from 'axios';
 import { AppContainer, SideBar, ContentWrapper } from './styles/app.styles';
 
 function App() {
-  //default city
+  //default cities 
   const [cities, setCities] = useState([
     {
-      "title": "San Francisco",
-      "location_type": "City",
-      "woeid": 2487956,
-      "latt_long": "37.777119, -122.41964"
+      title: "San Francisco",
+      location_type: "City",
+      woeid: 2487956,
+      latt_long: "37.777119, -122.41964"
+    },
+    {
+      title: 'Taipei',
+      location_type: 'City',
+      woeid: 2306179,
+      latt_long: '25.085960,121.561478',
+    },
+    {
+      title: 'Dubai',
+      location_type: 'City',
+      woeid: 1940345,
+      latt_long: '25.269440,55.308651',
     },
   ]);
   const [cityData, setCityData] = useState();
