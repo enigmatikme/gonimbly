@@ -9,9 +9,11 @@
     "@fortawesome/react-fontawesome": "^0.1.4",
     "axios": "^0.19.0",
     "babel-plugin-macros": "^2.6.1",
+    "concurrently": "^4.1.1",
     "express": "^4.17.1",
     "express-favicon": "^2.0.1",
     "moment": "^2.24.0",
+    "nodemon": "^1.19.1",
     "path": "^0.12.7",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
@@ -21,7 +23,9 @@
   },
   "scripts": {
     "start": "node server.js",
-    "dev": "yarn build && yarn start",
+    "server": "nodemon server.js",
+    "react": "react-scripts start",
+    "dev": "concurrently \"yarn server\" \"yarn react\"",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
@@ -40,5 +44,6 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "proxy": "http://localhost:8080"
 }
