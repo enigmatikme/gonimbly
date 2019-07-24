@@ -1,7 +1,7 @@
 import React from 'react';
 import { CityListContainer } from '../styles/cityList.styles';
 
-export default function CityList({cities, activeCity, fetchWeatherData, loading}) {
+export default function CityList({cities, activeCity, fetchWeatherData, loading, deleteCity}) {
   return (
     <CityListContainer>
       {
@@ -12,7 +12,9 @@ export default function CityList({cities, activeCity, fetchWeatherData, loading}
             onClick={() => fetchWeatherData(woeid)}
           >
             {title}
+            <div className="edit" onClick={() => deleteCity(i)}>X</div>
           </div>
+
         ))
       }
     </CityListContainer>

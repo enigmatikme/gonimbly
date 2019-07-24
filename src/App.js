@@ -38,6 +38,12 @@ function App() {
       fetchWeatherData(city.woeid)
   }
 
+  const deleteCity = (index) => {
+    var newList = cities;
+    newList.splice(index, 1);
+    setCities(newList);
+  }
+
   const fetchWeatherData = async (cityID) => {
     setLoading(true);
     let res = await axios.get(`/location/${cityID}/`).catch(err => console.log(err));
@@ -72,6 +78,7 @@ function App() {
               cities={cities}
               activeCity={activeCity}
               fetchWeatherData={fetchWeatherData}
+              deleteCity={deleteCity}
             />
             <Search setLoading={setLoading} addCity={addCity}/>
             <div className="conversion" onClick={handleScaleChange}>C/F</div>
