@@ -17,6 +17,7 @@ export default function CityList({cities, activeCity, fetchWeatherData, loading,
             {title}
             {editing && <p className="close" onClick={() => deleteCity(i)}>X</p> }
           </div>
+
         ))
       }
     </CityListContainer>

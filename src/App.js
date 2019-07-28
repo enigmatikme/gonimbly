@@ -41,6 +41,12 @@ function App() {
       fetchWeatherData(city.woeid)
   }
 
+  const deleteCity = (index) => {
+    var newList = cities;
+    newList.splice(index, 1);
+    setCities(newList);
+  }
+
   const fetchWeatherData = async (cityID) => {
     setLoading(true);
     const cachedObj = localStorage.getItem(cityID);
