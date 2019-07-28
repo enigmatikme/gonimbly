@@ -1,5 +1,5 @@
 import React from 'react';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import { image, convertDegrees } from '../helpers';
 import Loader from './Loader';
 import {  
@@ -111,7 +111,7 @@ const NoCityData = ({img}) => {
   )
 }
 
-export default function Card({consolidated_weather, closeCard, title, time, tempScale, loading}) {
+export default function Card({consolidated_weather, closeCard, title, time, tempScale, loading, timezone}) {
   let today
     , img = "Blood"
     , currentTime
@@ -124,7 +124,7 @@ export default function Card({consolidated_weather, closeCard, title, time, temp
     let popped = consolidated_weather[0]
     today = (popped === undefined) ? "Not shown" : popped;
     let t = time.substring(0,19)
-    currentTime = moment(t).format("LT")
+    currentTime = moment().tz(timezone).format("LT")
     img = image(time);
     if (loading) {
       return <Loading imgToTimeOfDay={imgToTimeOfDay} img={img}/>
