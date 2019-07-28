@@ -27,15 +27,23 @@ const SideBar = styled.div`
   height: 100%;
   margin-right: 20px;
   position: relative;
-  .conversion {
+  .features {
     font-size: 18px;
     position: absolute;
     bottom: 6px;
     color: white;
     transition: opacity .3s ease;
+    display:flex;
+    .conversion {
+      margin-right: 20px;
+      cursor: pointer;
+    }
+    .edit {
+      cursor: pointer;
+    }
   }
   .open {
-    & + .conversion {
+    & + .features {
       opacity: 0;
       pointer-events: none;
     }

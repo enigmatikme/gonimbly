@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Search from './components/Search';
 import CityList from './components/CityList';
 import Card from './components/Card';
+import moment from 'moment';
 import axios from 'axios';
 import { AppContainer, SideBar, ContentWrapper } from './styles/app.styles';
 
@@ -31,6 +32,8 @@ function App() {
   const [activeCity, setActiveCity] = useState('');
   const [tempScale, setTempScale] = useState('C');
   const [loading, setLoading] = useState(false);
+  const [editing, setEditing] = useState(false);
+  const [selectedItem, setItem] = useState(null);
 
   //* updates list of cities searched for
   const addCity = (city) => {
@@ -40,19 +43,38 @@ function App() {
 
   const fetchWeatherData = async (cityID) => {
     setLoading(true);
-    let res = await axios.get(`/location/${cityID}/`).catch(err => console.log(err));
-    if (res && res.data) {
-      setCityData(res.data);
-      setActiveCity(cityID);
-      setLoading(false);
-    } else {
-      alert("Error fetching data");
-    }
+    const cachedObj = localStorage.getItem(cityID);
+    if (cachedObj) {
+      const parsedData = JSON.parse(cachedObj);
+      const { requestTime } = parsedData;
+      const diff = moment().unix() - requestTime;
+      if (diff <= 60) {
+        setCityData(parsedData);
+        setActiveCity(cityID);
+        setLoading(false);
+        return;
+      }
+    } 
+      let res = await axios.get(`/location/${cityID}/`).catch(err => console.log(err));
+      res.data.requestTime = moment().unix();
+      if (res && res.data) {
+        setCityData(res.data);
+        setActiveCity(cityID);
+        localStorage.setItem(cityID, JSON.stringify(res.data))
+        setLoading(false);
+      } else {
+        alert("Error fetching data");
+      }
   }
 
   const closeCard = () => {
     setActiveCity('');
     setCityData({});
+  }
+  
+  const deleteCity = (index) => {
+    const newList = [...cities].filter((city, i) => i !== index);
+    setCities(newList)
   }
 
   const handleScaleChange = () => {
@@ -61,6 +83,18 @@ function App() {
     } else {
       setTempScale('C');
     }
+  }
+
+  const handleDragStart = (index) => {
+    setItem(cities[index]);
+  }
+
+  const handleDragOver = (e, index) => {
+    e.preventDefault();
+    if (selectedItem === cities[index]) return;
+    const newOrder = [...cities].filter(city => city !== selectedItem);
+    newOrder.splice(index, 0, selectedItem);
+    setCities(newOrder);
   }
 
     return (
@@ -72,9 +106,17 @@ function App() {
               cities={cities}
               activeCity={activeCity}
               fetchWeatherData={fetchWeatherData}
+              editing={editing}
+              deleteCity={deleteCity}
+              handleDragStart={ handleDragStart}
+              handleDragOver={ handleDragOver}
+              onDragEnd={() => setItem(null)}
             />
             <Search setLoading={setLoading} addCity={addCity}/>
-            <div className="conversion" onClick={handleScaleChange}>C/F</div>
+            <div className="features">
+              <div className="conversion" onClick={handleScaleChange}>C/F</div>
+              <div className="edit" onClick={()=> setEditing(!editing)}>{editing ? "Editing..." : "Edit"}</div>
+            </div>
           </SideBar>
           <Card
             {...cityData}

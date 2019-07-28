@@ -1,7 +1,7 @@
 import React from 'react';
 import { CityListContainer } from '../styles/cityList.styles';
 
-export default function CityList({cities, activeCity, fetchWeatherData, loading}) {
+export default function CityList({cities, activeCity, fetchWeatherData, loading, editing, deleteCity, handleDragStart, handleDragOver}) {
   return (
     <CityListContainer>
       {
@@ -9,9 +9,13 @@ export default function CityList({cities, activeCity, fetchWeatherData, loading}
           <div
             key={i}
             className={(activeCity === woeid ? "active " : " ") + (loading ? "loading" : "")}
-            onClick={() => fetchWeatherData(woeid)}
+            onClick={() => (!editing && fetchWeatherData(woeid))}
+            draggable={editing ? true : false}
+            onDragStart={() => handleDragStart(i)}
+            onDragOver={(event) => handleDragOver(event, i)}
           >
             {title}
+            {editing && <p className="close" onClick={() => deleteCity(i)}>X</p> }
           </div>
         ))
       }

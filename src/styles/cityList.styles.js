@@ -9,6 +9,7 @@ const CityListContainer = styled.div`
     text-align: center;
     margin-bottom: 10px;
     color: white;
+    position: relative;
 
     min-width: 180px;
     border-radius: 20px;
@@ -24,6 +25,13 @@ const CityListContainer = styled.div`
 
     &.loading {
       pointer-events: none;
+    }
+    p {
+      position: absolute;
+      margin: 0;
+      right: 12px;
+      top: 12px;
+  }
     }
   }
 `; 

@@ -44,6 +44,73 @@ const Day = (props) => {
   </div>
 }
 
+const CityCard = ({img, children}) => {
+  return (
+  <CardContainer>
+      <ImageContainer>
+        <img alt={`${img}`} src={`/img/${img}.png`}/>
+      </ImageContainer>
+      {children}
+  </CardContainer>
+  )
+}
+
+const Loading = ({imgToTimeOfDay, img}) => {
+  return (
+    <CityCard img={img}>
+      <Loader timeOfDay={imgToTimeOfDay[img]} />
+    </CityCard>
+  )
+}
+
+const Loaded = ({img, consolidated_weather, title, currentTime, closeCard, tempScale, today}) => {
+  return (
+    <CityCard img={img}>
+      <Weather consolidated_weather={consolidated_weather}/>
+        <ContentContainer>
+          <div className="city">
+            <p >{title}</p>
+            <p>{currentTime}</p>
+          </div>
+          <FontAwesomeIcon
+            className="close"
+            icon={["far", "times-circle"]}
+            onClick={closeCard}
+          />
+          <Today>
+            {(today !== '') && (
+              <div> 
+                <h1 className="temp">{Math.round(convertDegrees(today.the_temp, tempScale))}</h1>
+                <h3>{today.weather_state_name}</h3> 
+              </div>
+            )}
+          </Today>
+          <DayContainer style={{display: 'flex'}}>
+            {consolidated_weather.map((day, i) => {
+              if (i !== 0) {
+                return <Day tempScale={tempScale} key={i} {...day} index={i}/>
+              }
+            })}
+          </DayContainer>
+        </ContentContainer>
+    </CityCard>
+  )
+}
+
+const NoCityData = ({img}) => {
+  return (
+    <CityCard img={img}>
+      <ContentContainer>
+        <Today>
+          <div>
+            <h1 style={{fontSize: "20px"}}>Choose city</h1>
+          </div>
+        </Today>
+    </ContentContainer>
+    </CityCard>
+  )
+}
+
 export default function Card({consolidated_weather, closeCard, title, time, tempScale, loading}) {
   let today
     , img = "Blood"
@@ -59,63 +126,25 @@ export default function Card({consolidated_weather, closeCard, title, time, temp
     let t = time.substring(0,19)
     currentTime = moment(t).format("LT")
     img = image(time);
+    if (loading) {
+      return <Loading imgToTimeOfDay={imgToTimeOfDay} img={img}/>
+    } else {
+      return (
+        <Loaded 
+          img={img}
+          consolidated_weather={consolidated_weather}
+          title={title}
+          currentTime={currentTime}
+          closeCard={closeCard}
+          tempScale={tempScale}
+          today={today}
+        />
+      )
+    }
+  } else {
+    if (loading) {
+      return <Loading imgToTimeOfDay={imgToTimeOfDay} img={img}/>
+    }
+    return <NoCityData img={img}/>
   }
-  return(
-    <CardContainer>
-      <ImageContainer>
-        <img alt={`${img}`} src={`/img/${img}.png`}/>
-      </ImageContainer>
-      {consolidated_weather ? (
-        <>
-          {loading ? (
-            <Loader timeOfDay={imgToTimeOfDay[img]} />
-          ) : (
-            <>
-              <Weather consolidated_weather={consolidated_weather}/>
-              <ContentContainer>
-                <div className="city">
-                  <p >{title}</p>
-                  <p>{currentTime}</p>
-                </div>
-                <FontAwesomeIcon
-                  className="close"
-                  icon={["far", "times-circle"]}
-                  onClick={closeCard}
-                />
-                <Today>
-                  {(today !== '') && (
-                    <div> 
-                      <h1 className="temp">{Math.round(convertDegrees(today.the_temp, tempScale))}</h1>
-                      <h3>{today.weather_state_name}</h3> 
-                    </div>
-                  )}
-                </Today>
-                <DayContainer style={{display: 'flex'}}>
-                  {consolidated_weather.map((day, i) => {
-                    if (i !== 0) {
-                      return <Day tempScale={tempScale} key={i} {...day} index={i}/>
-                    }
-                  })}
-                </DayContainer>
-              </ContentContainer>
-            </>
-          )}
-        </>
-      ) : (
-        <>
-          {loading ? (
-            <Loader timeOfDay={imgToTimeOfDay[img]} />
-          ) : (
-          <ContentContainer>
-              <Today>
-                <div>
-                  <h1 style={{fontSize: "20px"}}>Choose city</h1>
-                </div>
-              </Today>
-          </ContentContainer>
-          )}
-        </>
-      )}
-    </CardContainer>
-  )
 }
