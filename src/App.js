@@ -6,6 +6,8 @@ import moment from 'moment';
 import axios from 'axios';
 import { AppContainer, SideBar, ContentWrapper } from './styles/app.styles';
 
+//just seeing if I can deploy to github pages
+
 function App() {
   //default cities 
   const [cities, setCities] = useState([
